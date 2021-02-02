@@ -3,4 +3,16 @@
 =======
 # TP01_NYNA_FANNY_MAMADOU
 Premier TP JAVA
->>>>>>> 24bff1085d14c5889c68853a59fa3c93e18b4862
+>>>>>>> 
+       les methodes
+
+doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
+getLastModified(HttpServletRequest req)
+doHead(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
+doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
+doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
+doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException
+getAllDeclaredMethods(Class<? extends HttpServlet> c)
+doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
+ doTrace(HttpServletRequest req, HttpServletResponse resp) throws ServletException
+service(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
