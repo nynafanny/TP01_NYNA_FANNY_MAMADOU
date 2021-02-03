@@ -5,6 +5,11 @@
  */
 package mypackage;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -38,16 +43,29 @@ public class EtudiantsServlet extends HttpServlet {
             out.println("<title>Servlet EtudiantsServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Formulaire étudiant </h1>");
-            out.println(" <form action=action_page.php>");
-            out.println("    <label for=fname>Nom :</label><br>");
-            out.println("    <input type=text id=fname name=fname><br><br>");
-            out.println("    <label for=lname>Prenom :</label><br>");
-            out.println("    <input type=text id=lname name=lname ><br><br>");
-            out.println("    <label for=lname>Email :</label><br>");
-            out.println("    <input type=text id=lname name=email ><br><br>");
-            out.println("    <input type=\"submit\" value=\"Sauvegarder\">");
-            out.println("</form>");
+              out.println("<h1><center>Liste des étudiants</center></h1>");
+              out.println("<table border='2px'>");
+              out.println("<tr>");
+              out.println("<th>Nom</th>");
+              out.println("<th>Prenom</th>");
+              out.println("<th>Email</th>");
+              out.println("</tr>");
+               try{
+        BufferedReader br = new BufferedReader(new FileReader("etudiants.csv"));
+                String line;
+        while((line = br.readLine()) != null){
+            String[] donne = line.split(",");
+            out.println("<tr>");
+            out.println("<td>"+donne[0]+"</td>");
+            out.println("<td>"+donne[1]+"</td>");
+            out.println("<td>"+donne[2]+"</td>");
+            out.println("</tr>");
+        }
+        }catch(FileNotFoundException e){
+            e.printStackTrace();
+        }
+            out.println("<table>");
+            
             out.println("</body>");
             out.println("</html>");
         }
@@ -80,6 +98,11 @@ public class EtudiantsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        String file_header = "nom,prenom,email";
+        String nom= request.getParameter("nom");
+        String prenom = request.getParameter("prenom");
+        String email = request.getParameter("email");
+      traitement (nom,prenom,email, mycsv);
     }
 
     /**
@@ -91,5 +114,22 @@ public class EtudiantsServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    String mycsv = "fichier.csv";
+    public static void traitement(String nom, String prenom, String email,String mycsv)
+        {
+            try
+           {
+             FileWriter file= new FileWriter (mycsv, true);
+             BufferedWriter buff = new  BufferedWriter(file);
+             PrintWriter ecrire = new PrintWriter (buff);
+
+             ecrire.println(nom + ','+ prenom + ','+email);
+             ecrire.flush();
+             ecrire.close();
+           }catch(IOException E)
+          {
+             
+          }
+        }
 
 }
