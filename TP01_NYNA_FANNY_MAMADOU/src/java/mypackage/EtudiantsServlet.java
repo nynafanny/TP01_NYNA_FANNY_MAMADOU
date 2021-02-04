@@ -5,7 +5,25 @@
  */
 package mypackage;
 
+
+import com.sun.xml.rpc.processor.modeler.j2ee.xml.string;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import static java.lang.System.out;
+import java.util.ArrayList;
+import java.util.List;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.swing.JOptionPane;import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -32,8 +50,10 @@ public class EtudiantsServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
@@ -42,30 +62,45 @@ public class EtudiantsServlet extends HttpServlet {
             out.println("<head>");
             out.println("<title>Servlet EtudiantsServlet</title>");            
             out.println("</head>");
-            out.println("<body>");
-              out.println("<h1><center>Liste des étudiants</center></h1>");
-              out.println("<table border='2px'>");
-              out.println("<tr>");
-              out.println("<th>Nom</th>");
-              out.println("<th>Prenom</th>");
-              out.println("<th>Email</th>");
-              out.println("</tr>");
-               try{
-        BufferedReader br = new BufferedReader(new FileReader("etudiants.csv"));
-                String line;
-        while((line = br.readLine()) != null){
-            String[] donne = line.split(",");
-            out.println("<tr>");
-            out.println("<td>"+donne[0]+"</td>");
-            out.println("<td>"+donne[1]+"</td>");
-            out.println("<td>"+donne[2]+"</td>");
-            out.println("</tr>");
-        }
-        }catch(FileNotFoundException e){
-            e.printStackTrace();
-        }
-            out.println("<table>");
-            
+            out.println("<body >");
+             out.println("<h1>LISTE DES ETUDIANTS</h1>");
+            try{
+                
+                InputStream flux=new FileInputStream("fichier1.csv"); 
+                InputStreamReader lecture=new InputStreamReader(flux);
+                BufferedReader buff=new BufferedReader(lecture);
+                String ligne;
+                string nom ;
+                final String sep = ",";
+ 
+                out.println("<table border=1;style=\"color:red\">");
+                out.println("<TBODY >"); 
+                out.println("<tr>"); 
+                out.println("<td>NOM</td>");
+                out.println("<td>PRENOM</td>");
+                out.println("<td>EMAIL</td>");
+                out.println("</tr>");
+                while ((ligne=buff.readLine())!=null)
+                    {
+                        //out.println(ligne);
+                    out.println("<br>");
+                    String mots[] = ligne.split(sep);
+                    out.println("<tr>");
+                    for (int i = 0; i < mots.length; i++) {
+                        out.println("<td>");
+                        out.println("\t"+mots[i]+"\t");
+                        out.println("</td>");
+                    }
+                }
+                    out.println("</tr>");
+                    out.println("</TBODY>"); 
+                    out.println("</table>");
+                    buff.close(); 
+            }	
+            catch (Exception e)
+            {
+                System.out.println(e.toString());
+            }
             out.println("</body>");
             out.println("</html>");
         }
@@ -82,8 +117,10 @@ public class EtudiantsServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         processRequest(request, response);
+        
+        
     }
 
     /**
@@ -97,12 +134,16 @@ public class EtudiantsServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-        String file_header = "nom,prenom,email";
-        String nom= request.getParameter("nom");
+        //processRequest(request, response);
+        PrintWriter out = response.getWriter();
+        //out.println(request.getParameter("nom"));
+        String nom = request.getParameter("nom");
         String prenom = request.getParameter("prenom");
         String email = request.getParameter("email");
-      traitement (nom,prenom,email, mycsv);
+        
+         enregistre(nom , prenom ,email,fichier);
+         doGet(request,response);
+         
     }
 
     /**
@@ -114,22 +155,23 @@ public class EtudiantsServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    String mycsv = "fichier.csv";
-    public static void traitement(String nom, String prenom, String email,String mycsv)
+
+        String fichier = "fichier1.csv";       
+        public static void enregistre(String nom, String prenom, String email,String fichier)
         {
             try
            {
-             FileWriter file= new FileWriter (mycsv, true);
-             BufferedWriter buff = new  BufferedWriter(file);
-             PrintWriter ecrire = new PrintWriter (buff);
+            FileWriter filread = new FileWriter (fichier , true);
+            BufferedWriter bw = new  BufferedWriter(filread);
+            PrintWriter write = new PrintWriter (bw);
+            write.println(nom + ','+ prenom + ','+email );
+            write.flush();
+            write.close();
 
-             ecrire.println(nom + ','+ prenom + ','+email);
-             ecrire.flush();
-             ecrire.close();
-           }catch(IOException E)
+           }
+          catch(Exception E)
           {
-             
-          }
+           }
         }
 
 }
