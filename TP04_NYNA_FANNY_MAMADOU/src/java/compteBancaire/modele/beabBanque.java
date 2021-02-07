@@ -21,8 +21,8 @@ public class beabBanque {
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
      private EntityManager em;
-     public CompteBancaire creerCompteBancaire(String lastName, String firstName, String acountNumber, double balance) {
-        CompteBancaire c = new CompteBancaire(lastName,firstName,acountNumber,balance);
+     public CompteBancaire creerCompteBancaire(String lastName, String firstName, String accountNumber, double balance) {
+        CompteBancaire c = new CompteBancaire(lastName,firstName,accountNumber,balance);
         em.persist(c);
         return c;
 }

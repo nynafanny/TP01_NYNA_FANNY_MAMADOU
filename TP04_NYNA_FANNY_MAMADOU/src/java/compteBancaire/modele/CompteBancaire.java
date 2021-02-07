@@ -26,6 +26,18 @@ public class CompteBancaire implements Serializable {
     private  String lastName;
     private String accountNumber;
     private double balance;
+    
+    public CompteBancaire  () {
+    
+    }
+    
+   public CompteBancaire (final String firstName,String lastName,String accountNumber,double balance){
+   this.accountNumber = accountNumber;
+   this.lastName = lastName;
+   this.firstName = firstName;
+   this.balance = balance;
+   
+   }
 
     public int getId() {
         return id;
